@@ -14,10 +14,18 @@ server.listen()
 clients = []
 nicknames = []
 
+
+def sanitize(input_string):
+    # 使用Python基本示例来转义HTML字符
+    import html
+    return html.escape(input_string)
+
 def broadcast(message, _sender=None):
+    sanitized_message = sanitize(message.decode('utf-8')).encode('utf-8')
     for client in clients:
         if client != _sender:
-            client.send(message)
+            client.send(sanitized_message)
+
 
 def handle_client(client):
     while True:
